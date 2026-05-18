@@ -144,13 +144,13 @@ void app_main(void)
     ESP_ERROR_CHECK(uart_param_config(UART_PORT_NUM, &ucfg));
     ESP_ERROR_CHECK(uart_driver_install(UART_PORT_NUM, 512, 0, 0, NULL, 0));
 
-    /* RMT RX channel with DMA */
+    /* RMT RX channel — no DMA (ESP32-H2 RMT RX does not support DMA) */
     rmt_rx_channel_config_t rx_cfg = {
         .gpio_num          = RMT_RX_GPIO,
         .clk_src           = RMT_CLK_SRC_DEFAULT,
         .resolution_hz     = RMT_CLK_HZ,
         .mem_block_symbols = RMT_BUF_SIZE,
-        .flags.with_dma    = true,
+        .flags.with_dma    = false,   // H2 RMT RX: DMA not supported
     };
     rmt_channel_handle_t rx_ch = NULL;
     ESP_ERROR_CHECK(rmt_new_rx_channel(&rx_cfg, &rx_ch));
